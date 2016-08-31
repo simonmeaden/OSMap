@@ -16,38 +16,52 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef GMLPOSLIST_H
-#define GMLPOSLIST_H
-
-#include <QObject>
-#include <QList>
-#include <QPair>
-#include <QSharedPointer>
-
+#include "gmlpoint.h"
 #include "gml_global.h"
 
 GML_BEGIN_NAMESPACE
 
-class GMLPos;
 
-class GMLSHARED_EXPORT GMLPosList : public QObject {
-    Q_OBJECT
-  public:
-    explicit GMLPosList( QObject *parent = 0 );
+/*!
+    \class GMLPoint
 
-  public:
-    void addPosition(QSharedPointer<GMLPos> pos );
-    void setPositions( QList<QSharedPointer<GMLPos>> );
-    void clear();
-    int size();
+    \brief Defines a single points position.
 
-    QSharedPointer<GMLPos> first() { return mPositions.at( 0 ); }
-    QSharedPointer<GMLPos> last() { return mPositions.last(); }
-    QSharedPointer<GMLPos> position(int i) { return mPositions.at(i); }
+    \author Simon Meaden
+    \date   16Jun 2016
+*/
 
-  protected:
-    QList<QSharedPointer<GMLPos> > mPositions;
-};
+/*!
+    \fn GMLPoint::GMLPoint( QString, QString, QObject * )
+
+    \brief Constructor for GMLPoint.
+
+    GMLPoint has three parameters, an id string,a name string and
+    a parent QObject.
+*/
+GMLPoint::GMLPoint( QString id, QString name, QObject *parent ) :
+    GMLObject( parent ),
+    GMLIdObject( id ),
+    GMLNamedObject( name ) {
+}
+
+/*!
+    \fn GMLPoint::point( )
+
+    \brief Returns the point as a GMLPos*.
+
+*/
+GMLPos *GMLPoint::point() {
+    return pPosition;
+}
+
+/*!
+    \fn GMLLineString::setPoint(GMLPos *point)
+
+    \brief Sets the point position.
+*/
+void GMLPoint::setPoint( GMLPos *point ) {
+    pPosition = point;
+}
 
 GML_END_NAMESPACE
-#endif // GMLPOSLIST_H

@@ -3,11 +3,10 @@
 
 #include "gml_global.h"
 
-class GMLSHARED_EXPORT Gml
-{
+class GMLSHARED_EXPORT Gml {
 
-public:
-    Gml();
+    public:
+        Gml();
 };
 
 #endif // GML_H

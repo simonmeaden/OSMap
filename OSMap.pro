@@ -1,6 +1,13 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    OSMapper \
-    ESRI \
-    gml
+    osmapper# \
+ #   gml \
+ #   osdb
+
+#gml.subdir = gml
+#osdb.subdir = osdb
+osmapper.subdir = osmapper
+
+#osmapper.depends = gml osdb
+

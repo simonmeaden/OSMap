@@ -1,20 +1,23 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-06-18T10:34:07
+# Project created by QtCreator 2016-06-18T10:17:00
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT       += core gui
 
-TEMPLATE = lib
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+TEMPLATE = app
+
+#CONFIG += debug_and_release_target
 CONFIG += static # static library
 CONFIG += c++11 # C++11 is the newest standard
 
-DESTDIR = ../../build/osmap/gml
+DESTDIR = ../../build/osmap
 
 CONFIG(debug, debug|release) {
-    TARGET = gmld
+    TARGET = osmapperd
     OBJECTS_DIR = $$DESTDIR/.obj
     MOC_DIR = $$DESTDIR/.mocd
     RCC_DIR = $$DESTDIR/.qrcd
@@ -22,16 +25,16 @@ CONFIG(debug, debug|release) {
 }
 
 CONFIG(release, debug|release) {
-    TARGET = gml
+    TARGET = osmapper
     OBJECTS_DIR = $$DESTDIR/.obj
     MOC_DIR = $$DESTDIR/.moc
     RCC_DIR = $$DESTDIR/.qrc
     UI_DIR = $$DESTDIR/.ui
 }
 
-include(gml.pri)
+SOURCES += main.cpp\
+        mainwindow.cpp
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+HEADERS  += mainwindow.h
+
+FORMS    += mainwindow.ui

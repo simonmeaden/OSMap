@@ -16,38 +16,50 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef GMLPOSLIST_H
-#define GMLPOSLIST_H
-
-#include <QObject>
-#include <QList>
-#include <QPair>
-#include <QSharedPointer>
-
+#include "gmlnamedobject.h"
 #include "gml_global.h"
 
 GML_BEGIN_NAMESPACE
 
-class GMLPos;
 
-class GMLSHARED_EXPORT GMLPosList : public QObject {
-    Q_OBJECT
-  public:
-    explicit GMLPosList( QObject *parent = 0 );
+/*!
+ * \class GMLNamedObject
+ *
+ * \brief A class that adds an name string to a GMLObject.
+ *
+ * \author Simon Meaden
+ * \date   16 Jun 2106
+ */
 
-  public:
-    void addPosition(QSharedPointer<GMLPos> pos );
-    void setPositions( QList<QSharedPointer<GMLPos>> );
-    void clear();
-    int size();
 
-    QSharedPointer<GMLPos> first() { return mPositions.at( 0 ); }
-    QSharedPointer<GMLPos> last() { return mPositions.last(); }
-    QSharedPointer<GMLPos> position(int i) { return mPositions.at(i); }
+GMLNamedObject::GMLNamedObject() {
+}
 
-  protected:
-    QList<QSharedPointer<GMLPos> > mPositions;
-};
+/*!
+ * \fn GMLNamedObject( QString )
+ *
+ * \brief Constructor for GMLIdObject.
+ */
+GMLNamedObject::GMLNamedObject( QString name ) :
+    mName( name ) {
+}
+
+/*!
+ * \fn GMLIdObject::setName( QString )
+ *
+ * \brief Sets the name string
+ */
+void GMLNamedObject::setName( QString name ) {
+    mName = name;
+}
+
+/*!
+ * \fn GMLIdObject::name()
+ *
+ * \brief Returns the name string
+ */
+QString GMLNamedObject::name() {
+    return mName;
+}
 
 GML_END_NAMESPACE
-#endif // GMLPOSLIST_H

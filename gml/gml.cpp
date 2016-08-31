@@ -1,6 +1,5 @@
 #include "gml.h"
 
 
-Gml::Gml()
-{
+Gml::Gml() {
 }

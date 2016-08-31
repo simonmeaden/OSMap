@@ -16,38 +16,46 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef GMLPOSLIST_H
-#define GMLPOSLIST_H
+#ifndef TERRAIN50_H
+#define TERRAIN50_H
 
 #include <QObject>
-#include <QList>
-#include <QPair>
-#include <QSharedPointer>
+#include <QMap>
+#include <QSqlDatabase>
 
+#include "featureobject.h"
 #include "gml_global.h"
 
 GML_BEGIN_NAMESPACE
 
-class GMLPos;
 
-class GMLSHARED_EXPORT GMLPosList : public QObject {
-    Q_OBJECT
-  public:
-    explicit GMLPosList( QObject *parent = 0 );
+class GMLObject;
 
-  public:
-    void addPosition(QSharedPointer<GMLPos> pos );
-    void setPositions( QList<QSharedPointer<GMLPos>> );
-    void clear();
-    int size();
+class GMLSHARED_EXPORT Terrain50 : public FeatureObject {
+        Q_OBJECT
+    public:
+        explicit Terrain50( QObject *parent = 0 );
 
-    QSharedPointer<GMLPos> first() { return mPositions.at( 0 ); }
-    QSharedPointer<GMLPos> last() { return mPositions.last(); }
-    QSharedPointer<GMLPos> position(int i) { return mPositions.at(i); }
+        int nominalScale();
+        void setNominalScale(int scale);
+        int elevationReference();
+        void setElevationReference(int reference);
+        int equidistance();
+        void setEquidistance(int equidistance);
+//        QString uom();
+//        void setUom(QString type);
 
-  protected:
-    QList<QSharedPointer<GMLPos> > mPositions;
+        virtual void convertToDb();
+
+    signals:
+
+    public slots:
+
+    protected:
+        int mNominalScale, mElevationReference, mEquidistance, mId;
+//        QString mEquidistanceType;
+
 };
 
 GML_END_NAMESPACE
-#endif // GMLPOSLIST_H
+#endif // TERRAIN50_H

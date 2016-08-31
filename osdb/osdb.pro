@@ -1,20 +1,17 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-06-18T10:34:07
+# Project created by QtCreator 2016-08-28T10:28:45
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT       += sql
 
 TEMPLATE = lib
 
-CONFIG += static # static library
-CONFIG += c++11 # C++11 is the newest standard
-
-DESTDIR = ../../build/osmap/gml
+DESTDIR = ../../build/osmap/osdb
 
 CONFIG(debug, debug|release) {
-    TARGET = gmld
+    TARGET = osdbd
     OBJECTS_DIR = $$DESTDIR/.obj
     MOC_DIR = $$DESTDIR/.mocd
     RCC_DIR = $$DESTDIR/.qrcd
@@ -22,16 +19,19 @@ CONFIG(debug, debug|release) {
 }
 
 CONFIG(release, debug|release) {
-    TARGET = gml
+    TARGET = osdb
     OBJECTS_DIR = $$DESTDIR/.obj
     MOC_DIR = $$DESTDIR/.moc
     RCC_DIR = $$DESTDIR/.qrc
     UI_DIR = $$DESTDIR/.ui
 }
 
-include(gml.pri)
+include(osdb.pri)
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+DISTFILES += \
+    osdb.pri

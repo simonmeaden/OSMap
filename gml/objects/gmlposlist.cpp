@@ -1,13 +1,26 @@
-/*!
-    \file gmlposlist.cpp
+/**
+ ** This file is part of the OSMap project.
+ ** Copyright 2016 Simon Meaden <simonmeaden@smelecomp.co.uk>.
+ **
+ ** This program is free software: you can redistribute it and/or modify
+ ** it under the terms of the GNU General Public License as published by
+ ** the Free Software Foundation, either version 3 of the License, or
+ ** (at your option) any later version.
+ **
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
+ **
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
 
-    \author Simon Meaden
-    \date   18 Jun 2016
-
-    Stores a GML poslist. A poslist is defined by a set of number pairs specifying a
-    list of consecutive position in metres to a one centimetre accuracy.
-*/
 #include "gmlposlist.h"
+#include "gml_global.h"
+
+GML_BEGIN_NAMESPACE
+
 
 
 /*!
@@ -29,11 +42,7 @@
     Basic constructor with no values specified. Positions can be added later using
     one of the GMLPosList::addPosition or GMLPosList::addPositions methods.
 
-    \sa GMLPosList::addPosition(QString, QString)
-    \sa GMLPosList::addPosition(int, int)
-    \sa GMLPosList::addPosition(QPair<int, int>)
-    \sa GMLPosList::addPositions(QList<int>)
-    \sa GMLPosList::addPositions(QList<QPair<int, int>>)
+    \sa GMLPosList::addPositions(QList<GMLPos*>)
 
     \note All positions are defined in centimetres.
 */
@@ -41,98 +50,32 @@ GMLPosList::GMLPosList( QObject *parent ) : QObject( parent ) {
 }
 
 /*!
-    \fn GMLPosList::addPosition( QString x, QString y )
-
-    \brief Add a position as two strings.
-
-    GML Strings are double values defined in metres to a one centimetre accuracy
-    for example 125675.23.
-
-    \sa GMLPosList::addPosition(int, int)
-    \sa GMLPosList::addPosition(QPair<int, int>)
-    \sa GMLPosList::addPositions(QList<int>)
-    \sa GMLPosList::addPositions(QList<QPair<int, int>>)
-
-    \note All positions are defined in centimetres.
-*/
-void GMLPosList::addPosition( QString x, QString y ) {
-    QPair<int, int> pair = qMakePair( ( x.toInt() * 100 ), ( y.toInt() * 100 ) );
-    addPosition( pair );
-}
-
-/*!
-    \fn GMLPosList::addPosition( QString x, QString y )
+    \fn GMLPosList::addPosition( GMLPos* )
 
     \brief Add a position as two integer values in centimetres.
 
-    \sa GMLPosList::addPosition(QString, QString)
-    \sa GMLPosList::addPosition(QPair<int, int>)
-    \sa GMLPosList::addPositions(QList<int>)
-    \sa GMLPosList::addPositions(QList<QPair<int, int>>)
+    \sa GMLPosList::addPositions(QList<GMLPos*>)
 
     \note All positions are defined in centimetres.
 */
-void GMLPosList::addPosition( int x, int y ) {
-    QPair<int, int> pair = qMakePair( x, y );
-    addPosition( pair );
+void GMLPosList::addPosition( QSharedPointer<GMLPos> pos ) {
+    mPositions.append(pos);
 }
 
 /*!
-    \fn GMLPosList::addPosition( QPair<int, int> )
-
-    \brief Add a position as two integer values in centimetres.
-
-    \sa GMLPosList::addPosition(QString, QString)
-    \sa GMLPosList::addPosition(int, int)
-    \sa GMLPosList::addPositions(QList<int>)
-    \sa GMLPosList::addPositions(QList<QPair<int, int>>)
-
-    \note All positions are defined in centimetres.
-*/
-void GMLPosList::addPosition( QPair<int, int> position ) {
-    addPosition( position );
-}
-
-/*!
-    \fn GMLPosList::addPositions( QList<int> )
-
-    \brief Add a set of position pairs as a single list of centimetre
-    accuracy integer values.
-
-    \sa GMLPosList::addPosition(QString, QString)
-    \sa GMLPosList::addPosition(int, int)
-    \sa GMLPosList::addPosition(QPair<int, int>)
-    \sa GMLPosList::addPositions(QList<int>)
-    \sa GMLPosList::addPositions(QList<QPair<int, int>>)
-
-    \note All positions are defined in centimetres.
-
-    \warning The number of values in the list MUST be a multiple of two.
-*/
-void GMLPosList::addPositions( QList<int> list ) {
-    Q_ASSERT_X( ( list.size() % 2 > 0 ), "position add", "position count must be a multiple of two" );
-    int size = list.size() / 2;
-
-    for ( int i = 0; i < size; i++ ) {
-        addPosition( list.at( i ), list.at( i + 1 ) );
-    }
-}
-
-/*!
-    \fn GMLPosList::addPositions( QList<QPair<int, int> > )
+    \fn GMLPosList::addPositions( QList<<GMLPos *> )
 
     \brief Add a set of position pairs as a single list of centimetre
     accuracy integer pairs.
 
-    \sa GMLPosList::addPosition(QString, QString)
-    \sa GMLPosList::addPosition(int, int)
-    \sa GMLPosList::addPosition(QPair<int, int>)
-    \sa GMLPosList::addPositions(QList<int>)
-    \sa GMLPosList::addPositions(QList<int>)
+    \sa GMLPosList::addPosition(GMLPos*)
 
     \note All positions are defined in centimetres.
 */
-void GMLPosList::addPositions( QList<QPair<int, int> > list ) {
+void GMLPosList::setPositions(QList<QSharedPointer<GMLPos> > list ) {
+
+    clear();
+
     for ( int i = 0; i < list.size(); i++ ) {
         addPosition( list.at( i ) );
     }
@@ -144,6 +87,17 @@ void GMLPosList::addPositions( QList<QPair<int, int> > list ) {
     \brief Removes all existing items and leaves an empty list.
 */
 void GMLPosList::clear() {
-    qDeleteAll( mPositions );
+//    qDeleteAll( mPositions );
     mPositions.clear();
 }
+
+/*!
+    \fn GMLPosList::size()
+
+    \brief Returns the number of position pairs in the list.
+*/
+int GMLPosList::size() {
+    return mPositions.size();
+}
+
+GML_END_NAMESPACE

@@ -16,51 +16,45 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef GMLOBJECT_H
-#define GMLOBJECT_H
+#ifndef GMLPOINTOBJECT_H
+#define GMLPOINTOBJECT_H
 
 #include <QObject>
-#include <QPainter>
+#include <QSharedPointer>
 
+#include "gmlobject.h"
+#include "gmlidobject.h"
+#include "gmlpos.h"
 #include "gml_global.h"
+#include "gmlenum.h"
 
 GML_BEGIN_NAMESPACE
 
-class GMLObject : public QObject {
+class GMLPointObject  : public GMLObject, public GMLIdObject, public GMLNumberedObject {
         Q_OBJECT
-    public:
-        explicit GMLObject( QObject *parent = 0 );
 
-        virtual bool intersects( QRect area )=0;
+    public:
+        GMLPointObject( QString referenceSquare, int number, QObject *parent = 0 );
+
+        int height();
+        void setHeight( int height );
+        GMLType type();
+        void setType( GMLType type );
+        //        QString uom();
+        //        void setUom( QString uom );
+        void setPosition( QSharedPointer<GMLPos> position );
+        QSharedPointer<GMLPos> position();
+
+        virtual bool intersects( QRect area );
+        virtual void paint( QPainter *painter );
 
     protected:
+        //        QString mUom;
+        GMLType mType;
+        int mHeight;
+        QSharedPointer<GMLPos> pPosition;
 
-        virtual void paint( QPainter *painter )=0;
-
-};
-
-class GMLIdObject {
-    public:
-        GMLIdObject();
-        GMLIdObject( QString referenceSquare );
-
-        void setReferenceSquare( QString referenceSquare );
-        QString referenceSquare();
-
-    protected:
-        QString mId;
-};
-
-class GMLNumberedObject {
-    public:
-        GMLNumberedObject( int idNumber );
-
-        void setIdNumber( int number );
-        int idNumber();
-
-    protected:
-        int mIdNumber;
 };
 
 GML_END_NAMESPACE
-#endif // GMLOBJECT_H
+#endif // GMLPOINTOBJECT_H

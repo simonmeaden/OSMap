@@ -16,38 +16,33 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef GMLPOSLIST_H
-#define GMLPOSLIST_H
+#ifndef GMLPOS_H
+#define GMLPOS_H
 
 #include <QObject>
-#include <QList>
-#include <QPair>
-#include <QSharedPointer>
 
 #include "gml_global.h"
 
 GML_BEGIN_NAMESPACE
 
-class GMLPos;
+class GMLSHARED_EXPORT GMLPos : public QObject {
+    public:
+        GMLPos( QObject *parent = 0 );
 
-class GMLSHARED_EXPORT GMLPosList : public QObject {
-    Q_OBJECT
-  public:
-    explicit GMLPosList( QObject *parent = 0 );
+        void setPosition( QString x, QString y );
+        void setPosition( int x, int y );
+        void setPosition( QPair<int, int> position );
+        int x() {
+            return mPosition.first;
+        }
+        int y() {
+            return mPosition.second;
+        }
 
-  public:
-    void addPosition(QSharedPointer<GMLPos> pos );
-    void setPositions( QList<QSharedPointer<GMLPos>> );
-    void clear();
-    int size();
 
-    QSharedPointer<GMLPos> first() { return mPositions.at( 0 ); }
-    QSharedPointer<GMLPos> last() { return mPositions.last(); }
-    QSharedPointer<GMLPos> position(int i) { return mPositions.at(i); }
-
-  protected:
-    QList<QSharedPointer<GMLPos> > mPositions;
+    protected:
+        QPair<int, int> mPosition;
 };
 
 GML_END_NAMESPACE
-#endif // GMLPOSLIST_H
+#endif // GMLPOS_H
